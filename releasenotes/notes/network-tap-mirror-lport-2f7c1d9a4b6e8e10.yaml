@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Add the ``remote_port_id`` attribute to the network ``TapMirror``
+    resource, used by the ``lport`` mirror type of the Tap-as-a-Service
+    ``tap-mirror-lport`` extension to mirror a port to another Neutron port.

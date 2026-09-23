@@ -23,6 +23,7 @@ EXAMPLE: dict[str, Any] = {
     'port_id': PORT_ID,
     'directions': {'IN': 99},
     'remote_ip': '193.10.10.1',
+    'remote_port_id': None,
     'mirror_type': 'erspanv1',
     'id': IDENTIFIER,
     'project_id': '42',
@@ -47,6 +48,7 @@ class TestTapMirror(base.TestCase):
         self.assertEqual(EXAMPLE['port_id'], sot.port_id)
         self.assertEqual(EXAMPLE['directions'], sot.directions)
         self.assertEqual(EXAMPLE['remote_ip'], sot.remote_ip)
+        self.assertEqual(EXAMPLE['remote_port_id'], sot.remote_port_id)
         self.assertEqual(EXAMPLE['mirror_type'], sot.mirror_type)
         self.assertEqual(EXAMPLE['id'], sot.id)
         self.assertEqual(EXAMPLE['project_id'], sot.project_id)
@@ -63,3 +65,17 @@ class TestTapMirror(base.TestCase):
             },
             sot._query_mapping._mapping,
         )
+
+    def test_make_lport(self):
+        example = dict(
+            EXAMPLE,
+            mirror_type='lport',
+            remote_ip=None,
+            remote_port_id='REMOTE_PORT_ID',
+            directions={'BOTH': None},
+        )
+        sot = tap_mirror.TapMirror(**example)
+        self.assertEqual('lport', sot.mirror_type)
+        self.assertIsNone(sot.remote_ip)
+        self.assertEqual('REMOTE_PORT_ID', sot.remote_port_id)
+        self.assertEqual({'BOTH': None}, sot.directions)

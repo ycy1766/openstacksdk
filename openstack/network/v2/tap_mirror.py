@@ -46,9 +46,12 @@ class TapMirror(resource.Resource):
     tenant_id = resource.Body('tenant_id', deprecated=True)
     #: The id of the port the Tap Mirror is associated with
     port_id = resource.Body('port_id')
-    #: The status for the tap service.
+    #: The mirrored directions (IN, OUT or BOTH) with their tunnel ID; the
+    #: tunnel ID is optional for the lport mirror type.
     directions = resource.Body('directions')
-    #: The destination IP address of the Tap Mirror
+    #: The destination IP address of the Tap Mirror (gre and erspanv1)
     remote_ip = resource.Body('remote_ip')
-    #: The type of the Tap Mirror, it can be gre or erspanv1
+    #: The ID of the port receiving the mirrored traffic (lport mirror type)
+    remote_port_id = resource.Body('remote_port_id')
+    #: The type of the Tap Mirror, it can be gre, erspanv1 or lport
     mirror_type = resource.Body('mirror_type')
