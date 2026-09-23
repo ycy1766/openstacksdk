@@ -102,6 +102,7 @@ from openstack.network.v2 import subnet as _subnet
 from openstack.network.v2 import subnet_pool as _subnet_pool
 from openstack.network.v2 import tap_flow as _tap_flow
 from openstack.network.v2 import tap_mirror as _tap_mirror
+from openstack.network.v2 import tap_mirror_rule as _tap_mirror_rule
 from openstack.network.v2 import tap_service as _tap_service
 from openstack.network.v2 import trunk as _trunk
 from openstack.network.v2 import vpn_endpoint_group as _vpn_endpoint_group
@@ -199,6 +200,7 @@ class Proxy(proxy.Proxy):
         "subnet_pool": _subnet_pool.SubnetPool,
         "tap_flow": _tap_flow.TapFlow,
         "tap_mirror": _tap_mirror.TapMirror,
+        "tap_mirror_rule": _tap_mirror_rule.TapMirrorRule,
         "tap_service": _tap_service.TapService,
         "trunk": _trunk.Trunk,
         "vpn_endpoint_group": _vpn_endpoint_group.VpnEndpointGroup,
@@ -9141,6 +9143,104 @@ class Proxy(proxy.Proxy):
     ) -> Generator[_tap_mirror.TapMirror, None, None]:
         """Return a generator of Tap Mirrors"""
         return self._list(_tap_mirror.TapMirror, **query)
+
+    # ====== Tap Mirror Rules ======
+
+    def create_tap_mirror_rule(
+        self, tap_mirror: str | _tap_mirror.TapMirror, **attrs: Any
+    ) -> _tap_mirror_rule.TapMirrorRule:
+        """Create a new Tap Mirror Rule from attributes
+
+        :param tap_mirror: The value can be the ID of the Tap Mirror the rule
+            belongs to or a
+            :class:`~openstack.network.v2.tap_mirror.TapMirror` instance.
+        :param attrs: Keyword arguments which will be used to create a
+            :class:`~openstack.network.v2.tap_mirror_rule.TapMirrorRule`,
+            comprised of the properties on the TapMirrorRule class.
+
+        :returns: The results of resource creation
+        """
+        mirror = self._get_resource(_tap_mirror.TapMirror, tap_mirror)
+        return self._create(
+            _tap_mirror_rule.TapMirrorRule, tap_mirror_id=mirror.id, **attrs
+        )
+
+    def delete_tap_mirror_rule(
+        self,
+        tap_mirror_rule: str | _tap_mirror_rule.TapMirrorRule,
+        tap_mirror: str | _tap_mirror.TapMirror,
+        ignore_missing: bool = True,
+    ) -> None:
+        """Delete a Tap Mirror Rule
+
+        :param tap_mirror_rule: The value can be the ID of a Tap Mirror Rule
+            or a :class:`~openstack.network.v2.tap_mirror_rule.TapMirrorRule`
+            instance.
+        :param tap_mirror: The value can be the ID of the Tap Mirror the rule
+            belongs to or a
+            :class:`~openstack.network.v2.tap_mirror.TapMirror` instance.
+        :param ignore_missing: When set to ``False``
+            :class:`~openstack.exceptions.NotFoundException` will be
+            raised when the resource does not exist.
+            When set to ``True``, no exception will be set when
+            attempting to delete a nonexistent Tap Mirror Rule.
+
+        :returns: ``None``
+        """
+        mirror = self._get_resource(_tap_mirror.TapMirror, tap_mirror)
+        self._delete(
+            _tap_mirror_rule.TapMirrorRule,
+            tap_mirror_rule,
+            ignore_missing=ignore_missing,
+            tap_mirror_id=mirror.id,
+        )
+
+    def get_tap_mirror_rule(
+        self,
+        tap_mirror_rule: str | _tap_mirror_rule.TapMirrorRule,
+        tap_mirror: str | _tap_mirror.TapMirror,
+    ) -> _tap_mirror_rule.TapMirrorRule:
+        """Get a single Tap Mirror Rule
+
+        :param tap_mirror_rule: The value can be the ID of a Tap Mirror Rule
+            or a :class:`~openstack.network.v2.tap_mirror_rule.TapMirrorRule`
+            instance.
+        :param tap_mirror: The value can be the ID of the Tap Mirror the rule
+            belongs to or a
+            :class:`~openstack.network.v2.tap_mirror.TapMirror` instance.
+
+        :returns: One
+            :class:`~openstack.network.v2.tap_mirror_rule.TapMirrorRule`
+        :raises: :class:`~openstack.exceptions.NotFoundException`
+            when no resource can be found.
+        """
+        mirror = self._get_resource(_tap_mirror.TapMirror, tap_mirror)
+        return self._get(
+            _tap_mirror_rule.TapMirrorRule,
+            tap_mirror_rule,
+            tap_mirror_id=mirror.id,
+        )
+
+    def tap_mirror_rules(
+        self,
+        tap_mirror: str | _tap_mirror.TapMirror,
+        **query: Any,
+    ) -> Generator[_tap_mirror_rule.TapMirrorRule, None, None]:
+        """Return a generator of Tap Mirror Rules
+
+        :param tap_mirror: The value can be the ID of the Tap Mirror the rules
+            belong to or a
+            :class:`~openstack.network.v2.tap_mirror.TapMirror` instance.
+        :param query: Optional query parameters to be sent to limit
+            the resources being returned.
+
+        :returns: A generator of Tap Mirror Rule objects
+            :class:`~openstack.network.v2.tap_mirror_rule.TapMirrorRule`
+        """
+        mirror = self._get_resource(_tap_mirror.TapMirror, tap_mirror)
+        return self._list(
+            _tap_mirror_rule.TapMirrorRule, tap_mirror_id=mirror.id, **query
+        )
 
     # ====== Tap Services ======
 

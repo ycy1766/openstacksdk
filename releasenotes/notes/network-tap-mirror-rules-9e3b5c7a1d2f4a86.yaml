@@ -1,0 +1,8 @@
+---
+features:
+  - |
+    Add the network ``TapMirrorRule`` resource and the
+    ``create_tap_mirror_rule``, ``delete_tap_mirror_rule``,
+    ``get_tap_mirror_rule`` and ``tap_mirror_rules`` proxy methods for the
+    ``rules`` sub-resource of Tap Mirrors (Tap-as-a-Service
+    ``tap-mirror-rules`` extension).

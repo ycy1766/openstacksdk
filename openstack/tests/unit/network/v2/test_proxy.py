@@ -68,6 +68,7 @@ from openstack.network.v2 import service_provider
 from openstack.network.v2 import subnet
 from openstack.network.v2 import subnet_pool
 from openstack.network.v2 import tap_mirror
+from openstack.network.v2 import tap_mirror_rule
 from openstack.network.v2 import vpn_endpoint_group
 from openstack.network.v2 import vpn_ike_policy
 from openstack.network.v2 import vpn_ipsec_policy
@@ -3061,4 +3062,53 @@ class TestNetworkPortBinding(TestNetworkProxy):
             'port-id',
             'host-id',
             ignore_missing=False,
+        )
+
+
+TAP_MIRROR_ID = 'tap-mirror-id-' + uuid.uuid4().hex
+
+
+class TestNetworkTapMirrorRule(TestNetworkProxy):
+    def test_create_tap_mirror_rule(self):
+        self.verify_create(
+            self.proxy.create_tap_mirror_rule,
+            tap_mirror_rule.TapMirrorRule,
+            method_kwargs={'tap_mirror': TAP_MIRROR_ID},
+            expected_kwargs={'tap_mirror_id': TAP_MIRROR_ID},
+        )
+
+    def test_delete_tap_mirror_rule(self):
+        self.verify_delete(
+            self.proxy.delete_tap_mirror_rule,
+            tap_mirror_rule.TapMirrorRule,
+            ignore_missing=False,
+            method_args=["resource_or_id", TAP_MIRROR_ID],
+            expected_args=["resource_or_id"],
+            expected_kwargs={'tap_mirror_id': TAP_MIRROR_ID},
+        )
+
+    def test_delete_tap_mirror_rule_ignore(self):
+        self.verify_delete(
+            self.proxy.delete_tap_mirror_rule,
+            tap_mirror_rule.TapMirrorRule,
+            ignore_missing=True,
+            method_args=["resource_or_id", TAP_MIRROR_ID],
+            expected_args=["resource_or_id"],
+            expected_kwargs={'tap_mirror_id': TAP_MIRROR_ID},
+        )
+
+    def test_get_tap_mirror_rule(self):
+        self.verify_get(
+            self.proxy.get_tap_mirror_rule,
+            tap_mirror_rule.TapMirrorRule,
+            method_kwargs={'tap_mirror': TAP_MIRROR_ID},
+            expected_kwargs={'tap_mirror_id': TAP_MIRROR_ID},
+        )
+
+    def test_tap_mirror_rules(self):
+        self.verify_list(
+            self.proxy.tap_mirror_rules,
+            tap_mirror_rule.TapMirrorRule,
+            method_kwargs={'tap_mirror': TAP_MIRROR_ID},
+            expected_kwargs={'tap_mirror_id': TAP_MIRROR_ID},
         )

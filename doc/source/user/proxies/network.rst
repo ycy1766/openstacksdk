@@ -370,3 +370,11 @@ Tap Mirror operations
   :noindex:
   :members: create_tap_mirror, delete_tap_mirror, find_tap_mirror,
             get_tap_mirror, tap_mirrors, update_tap_mirror
+
+Tap Mirror Rule operations
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: openstack.network.v2._proxy.Proxy
+  :noindex:
+  :members: create_tap_mirror_rule, delete_tap_mirror_rule,
+            get_tap_mirror_rule, tap_mirror_rules
